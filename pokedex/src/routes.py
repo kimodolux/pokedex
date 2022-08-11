@@ -1,5 +1,5 @@
-from flask import render_template
-from pokeapi import get_pokemon
+from flask import render_template, url_for
+from pokeapi import get_link, get_pokemon, get_first_gen_pokedex
 from utils import get_abilities, get_moves, get_stats
 
 from app import app
@@ -17,7 +17,21 @@ def home():
 
 @app.route("/pokedex", methods=["GET"])
 def pokedex():
-    return render_template("pokedex.html")
+    pokedex_data = get_first_gen_pokedex()
+    if "err" in pokedex_data.keys():
+        return render_template("error.html", error=pokemon_data["err"])
+    pokemon_data = [
+        get_link(pokemon_link["url"]) for pokemon_link in pokedex_data["results"]
+    ]
+    pokemon_dict = [
+        {
+            "name": pokemon["name"].capitalize(),
+            "sprites": pokemon["sprites"],
+            "href": url_for("pokemon", pokemon_name=pokemon["name"]),
+        }
+        for pokemon in pokemon_data
+    ]
+    return render_template("pokedex.html", pokemon_dict=pokemon_dict)
 
 
 @app.route("/pokemon/<pokemon_name>", methods=["GET"])
