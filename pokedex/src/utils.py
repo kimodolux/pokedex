@@ -1,0 +1,98 @@
+from pokeapi import get_link
+
+
+def get_abilities(pokemon_data):
+    abilities_links = pokemon_data["abilities"]
+    abilities_dict = [
+        get_link(ability["ability"]["url"]) for ability in abilities_links
+    ]
+    abilities = []
+    for ability in abilities_dict:
+        effects = ability.get("effect_entries")
+        for effect in effects:
+            if effect["language"]["name"] == "en":
+                en_effect = effect
+
+        abilities.append(
+            {
+                "name": ability.get("name").capitalize(),
+                "effect": en_effect["short_effect"],
+            }
+        )
+    return abilities
+
+
+def get_moves(pokemon_data):
+    moves_links = pokemon_data["moves"]
+    moves_dict = [
+        {
+            "move": get_link(move["move"]["url"]),
+            "version_group_details": move["version_group_details"],
+        }
+        for move in moves_links
+    ]
+    moves = []
+    for move in moves_dict:
+        move_info = move["move"]
+        version_group_details = move["version_group_details"]
+        effects = move_info.get("effect_entries")
+        for effect in effects:
+            if effect["language"]["name"] == "en":
+                en_effect = effect
+        for detail in version_group_details:
+            if detail["version_group"]["name"] == "emerald":
+                en_details = detail
+        effect = en_effect.get("short_effect")
+        effect_chance = move_info.get("effect_chance")
+        moves.append(
+            {
+                "name": move_info.get("name").capitalize(),
+                "class": move_info.get("damage_class"),
+                "pp": move_info.get("pp"),
+                "power": move_info.get("power"),
+                "accuracy": move_info.get("accuracy"),
+                "type": move_info.get("type").get("name"),
+                "effect": effect
+                if not "$effect_chance" in effect
+                else effect.replace("$effect_chance", str(effect_chance)),
+                "effect_chance": move_info.get("effect_chance"),
+                "learn_method": en_details.get("move_learn_method").get("name"),
+                "level_learned_at": en_details.get("level_learned_at"),
+            }
+        )
+    return moves
+
+
+def get_stat_bar_color(stat_value):
+    if stat_value > 150:
+        return "#00ff00"
+    percent = stat_value / 150
+    percent_diff = 1 - percent
+    red = min(255, percent_diff * 255)
+    green = min(255, percent * 255)
+
+    return f"rgb({red}, {green}, 0)"
+
+
+def shorten_stat_names(stat_name):
+    if stat_name == "special-attack":
+        return "Sp. Attack"
+    if stat_name == "special-defense":
+        return "Sp. Defense"
+    return stat_name
+
+
+def get_stats(pokemon_data):
+    stats = pokemon_data.get("stats")
+    base_stats = []
+    for stat in stats:
+        base_stats.append(
+            {
+                "name": shorten_stat_names(stat["stat"]["name"]).capitalize(),
+                "value": stat["base_stat"],
+                "color": get_stat_bar_color(stat["base_stat"]),
+                "percentage_of_max": int(stat["base_stat"] / 255 * 100),
+            }
+        )
+
+    return base_stats
