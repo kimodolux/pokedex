@@ -55,6 +55,7 @@ def pokemon(pokemon_name):
     )
     tm_moves = [move for move in moves if "machine" in move.get("learn_method")]
     tutor_moves = [move for move in moves if "tutor" in move.get("learn_method")]
+    egg_moves = [move for move in moves if "egg" in move.get("learn_method")]
     # base_expereince = pokemon_data["base_expereince"]
     return render_template(
         "pokemon.html",
@@ -68,5 +69,6 @@ def pokemon(pokemon_name):
         level_up_moves=level_up_moves,
         tm_moves=tm_moves,
         tutor_moves=tutor_moves,
+        egg_moves=egg_moves,
         types=types,
     )

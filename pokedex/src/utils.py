@@ -22,6 +22,22 @@ def get_abilities(pokemon_data):
     return abilities
 
 
+def get_latest_group(groups):
+    latest_group = {
+        "version_group": {
+            "name": "",
+            "url": "https://pokeapi.co/api/v2/version-group/0/",
+        }
+    }
+    for group in groups:
+        if (
+            group["version_group"]["url"][-3:-1]
+            > latest_group["version_group"]["url"][-3:-1]
+        ):
+            latest_group = group
+    return latest_group
+
+
 def get_moves(pokemon_data):
     moves_links = pokemon_data["moves"]
     moves_dict = [
@@ -39,11 +55,11 @@ def get_moves(pokemon_data):
         for effect in effects:
             if effect["language"]["name"] == "en":
                 en_effect = effect
-        for detail in version_group_details:
-            if detail["version_group"]["name"] == "emerald":
-                en_details = detail
+        latest_group = get_latest_group(version_group_details)
         effect = en_effect.get("short_effect")
         effect_chance = move_info.get("effect_chance")
+        print(move)
+        print("  ")
         moves.append(
             {
                 "name": move_info.get("name").capitalize(),
@@ -56,8 +72,8 @@ def get_moves(pokemon_data):
                 if not "$effect_chance" in effect
                 else effect.replace("$effect_chance", str(effect_chance)),
                 "effect_chance": move_info.get("effect_chance"),
-                "learn_method": en_details.get("move_learn_method").get("name"),
-                "level_learned_at": en_details.get("level_learned_at"),
+                "learn_method": latest_group.get("move_learn_method").get("name"),
+                "level_learned_at": latest_group.get("level_learned_at"),
             }
         )
     return moves
