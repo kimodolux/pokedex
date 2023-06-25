@@ -1,8 +1,10 @@
 import flask
 from flask_sqlalchemy import SQLAlchemy
-from os import environ
+import os
+import secrets
 
 db = SQLAlchemy()
 app = flask.Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = environ.get('DB_URL')
+app.config['SECRET_KEY'] = os.environ.get('FLASK_SECRET_KEY') or secrets.token_urlsafe(32)
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('DB_URL')
 db.init_app(app)

@@ -7,7 +7,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DB_URL=mysql+pymysql://pokedex:pokedex@mysqldb:3306/pokedex
+      - DB_URL=mysql+pymysql://${MYSQL_USER}:${MYSQL_USER}@mysqldb:3306/${MYSQL_DATABASE}
     depends_on:
       mysqldb:
         condition: service_healthy
@@ -19,10 +19,10 @@ services:
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=pass
-      - MYSQL_DATABASE=pokedex
-      - MYSQL_USER=pokedex
-      - MYSQL_PASSWORD=pokedex
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
     volumes:
       - ./mysql-data:/var/lib/mysql
       - ./mysql-init-files:/docker-entrypoint-initdb.d
