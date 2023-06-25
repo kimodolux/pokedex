@@ -1,0 +1,15 @@
+<div>
+    <div style="display: flex; justify-content: flex-start;">
+        <p style="padding-right: 2em; font-weight: bold;">{{ move.move_name.capitalize() }}</p>
+        <p>{{ move.short_effect }}</p>
+    </div>
+    <div style="display: flex; justify-content: space-between;">
+        
+        <div>{% if move.level_learned_at != 0 %} {{ move.level_learned_at }} {% endif %}</div>
+        <div>Type: {{ move.type.capitalize() }}</div>
+        <div>Class: {{ move.move_class.capitalize() }}</div>
+        <div>Power: {{ move.power or '-' }}</div>
+        <div>Accuracy: {{ move.accuracy or '-' }}</div>
+        <div>PP: {{ move.pp }} </div>
+    </div>
+</div>

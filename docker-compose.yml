@@ -1,0 +1,32 @@
+version: "2"
+services:
+  app:
+    build: ./app
+    links:
+      - mysqldb
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_URL=mysql+pymysql://pokedex:pokedex@mysqldb:3306/pokedex
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+  mysqldb:
+    platform: linux/amd64
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=pass
+      - MYSQL_DATABASE=pokedex
+      - MYSQL_USER=pokedex
+      - MYSQL_PASSWORD=pokedex
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - ./mysql-init-files:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-p"]
+      timeout: 20s
+      retries: 10

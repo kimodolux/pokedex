@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+    <div style="background: #1F5161; padding: 2em; display: flex;">
+        <div>
+            {% for ability in abilities %}
+                <div id="ability-{{loop.index}}" class="pokemon" style="display: flex; justify-content: space-between; align-items: center;">
+                        <p>{{ability.ability_name}}</p>
+                        <p>{{ability.short_effect}}</p>
+                        <br/>
+                        <br/>
+                        <br/>
+
+                </div>
+            {% endfor %}
+    </div>
+{% endblock %}
