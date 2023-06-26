@@ -5,7 +5,7 @@ services:
     links:
       - mysqldb
     ports:
-      - "8000:8000"
+      - "8000:80"
     environment:
       - DB_URL=mysql+pymysql://${MYSQL_USER}:${MYSQL_USER}@mysqldb:3306/${MYSQL_DATABASE}
     depends_on:
