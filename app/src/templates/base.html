@@ -7,5 +7,10 @@
   <header>
     {% block header %}{% endblock %}
   </header>
-  {% block content %}{% endblock %}
+  <div style="background: #1F5161; padding: 2em;">
+    <a href="/"><img style="width: 15em; height: 5em;" src="static/pokedex.png"/></a>
+  </div>
+  <div>
+    {% block content %}{% endblock %}
+  </div>
 </section>

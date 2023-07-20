@@ -1,11 +1,45 @@
 {% extends "base.html" %}
 {% block content %}
-    <div style="background: #1F5161; padding: 2em; display: flex; height: 100%; width: 100%;">
-        <div>
-            <a href="/gen1"><p style="color: antiquewhite;">Gen 1 Pokedex</p></a>    
-            <a href="/gen2"><p style="color: antiquewhite;">Gen 2 Pokedex</p></a>    
-            <a href="/gen3"><p style="color: antiquewhite;">Gen 3 Pokedex</p></a>    
-            <a href="/gen4"><p style="color: antiquewhite;">Gen 4 Pokedex</p></a>    
+    <div style="width: 100%;">
+        <div class="pokedex_wrapper">
+            <div class="generation_link">
+                <a href="/gen1"><h1 style="font-size: 2em;">Generation 1</h1></a>
+            </div>
+            <div class="generation_sprites">
+            {% for pokemon_sprite in gen_1_sprites %}
+                <img src={{pokemon_sprite}} alt="sprite">
+            {% endfor %}
+            </div>
+        </div>
+        <div class="pokedex_wrapper">
+            <div class="generation_link">
+                <a href="/gen2"><h1 style="font-size: 2em;">Generation 2</h1></a>
+            </div>
+            <div class="generation_sprites">
+            {% for pokemon_sprite in gen_2_sprites %}
+                <img src={{pokemon_sprite}} alt="sprite">
+            {% endfor %}
+            </div>
+        </div>
+        <div class="pokedex_wrapper">
+            <div class="generation_link">
+                <a href="/gen3"><h1 style="font-size: 2em;">Generation 3</h1></a>
+            </div>
+            <div class="generation_sprites">
+            {% for pokemon_sprite in gen_3_sprites %}
+                <img src={{pokemon_sprite}} alt="sprite">
+            {% endfor %}
+            </div>
+        </div>
+        <div class="pokedex_wrapper">
+            <div class="generation_link">
+                <a href="/gen4"><h1 style="font-size: 2em;">Generation 4</h1></a>
+            </div>
+            <div class="generation_sprites">
+            {% for pokemon_sprite in gen_4_sprites %}
+                <img src={{pokemon_sprite}} alt="sprite">
+            {% endfor %}
+            </div>
         </div>
     </div>
 {% endblock %}

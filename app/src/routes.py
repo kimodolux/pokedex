@@ -12,20 +12,29 @@ from models.pokemon_move_association import Pokemon_Move_Association
 
 @app.route("/", methods=["GET"])
 def home():
-    return render_template("pokedex.html")
+    gen_1_results = db.session.execute(db.select(Pokemon.sprite).where(Pokemon.id.in_([1,4,7]))).scalars()
+    gen_2_results = db.session.execute(db.select(Pokemon.sprite).where(Pokemon.id.in_([152,155,158]))).scalars()
+    gen_3_results = db.session.execute(db.select(Pokemon.sprite).where(Pokemon.id.in_([252,255,258]))).scalars()
+    gen_4_results = db.session.execute(db.select(Pokemon.sprite).where(Pokemon.id.in_([387,390,393]))).scalars()
+    gen_1_sprites = gen_1_results.all()
+    gen_2_sprites = gen_2_results.all()
+    gen_3_sprites = gen_3_results.all()
+    gen_4_sprites = gen_4_results.all()
+    return render_template(
+        "pokedex.html", 
+        gen_1_sprites=gen_1_sprites, 
+        gen_2_sprites=gen_2_sprites, 
+        gen_3_sprites=gen_3_sprites, 
+        gen_4_sprites=gen_4_sprites
+    )
 
-
-@app.route("/pokemon", methods=["GET"])
-def list_pokemon():
-    results = db.session.execute(db.select(Pokemon).limit(100).offset(151)).scalars()
-    pokemon_list: list[Pokemon] = results.all()
-    return render_template("pokemon_list.html", pokemon_list=pokemon_list)
 
 @app.route("/gen1", methods=["GET"])
 def list_gen1_pokemon():
     results = db.session.execute(db.select(Pokemon).limit(151)).scalars()
     pokemon_list: list[Pokemon] = results.all()
     return render_template("pokemon_list.html", pokemon_list=pokemon_list)
+
 
 
 @app.route("/gen2", methods=["GET"])
